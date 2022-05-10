@@ -1,0 +1,399 @@
+---
+title: "Replication Project"
+author: "Jason Archimandritis"
+date: "May 11, 2022"
+output:
+  pdf_document:
+    keep_tex: yes
+    fig_caption: yes
+  html_document:
+    df_print: paged
+  word_document: default
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 12pt
+urlcolor: black
+header-includes:
+- \pagenumbering{arabic}
+- \usepackage{setspace}\doublespacing
+---
+
+
+```{r setup, include=FALSE}
+# This cell contains default chunk options
+# These will be applied to all chunks unless an individual chunk is modified
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(dev = 'pdf')
+library("knitr")
+library("formatR")
+opts_chunk$set(tidy.opts=list(width.cutoff=80),tidy=TRUE)
+options("modelsummary_format_numeric_latex" = "plain")
+
+# You may modify this chunk to include additional options
+# For example, there are options that can change the layout for all figures
+
+# You can also modify the header options above this chunk to change the
+# formatting of the output, but do so at your own risk.
+
+# This book provides lots of tips for using RMarkdown: https://bookdown.org/yihui/rmarkdown-cookbook/
+
+
+```
+
+# INTRODUCTION
+
+
+
+
+The paper I have chosen to study for this project is "The Personality of the Politically Ambitious" by Dynes et al. 2018. As the title suggests it is exploring the relationship between individual level personality traits and
+political ambition. For Personality Traits the study makes use of "the Big Five" which is essentially 10 personality traits laid out as 5 separate, typically reffered to by one end of the spectrum, the traits are typiaclly seen as "Openness to Experience", "Conscientiousness", "Extraversion", "Agreeableness", and "neuroticism" though for the last trait this study (and many others) refers to "Emotional Stability" instead of "Neuroticism." If one were to compare studies that code this differently, a simple reverse coding of this variable would yield the same result, much the way reverse coding "extraversion" would yield a score for its opposite "introversion", though conventionally speaking it would be unlikely to see a study code this as such. 
+
+The dependent variable in the portion of original study that I will be replicating is a self report 3 category survey response with the responses "I have no interest in running for elected office", "I am open to the possibility of holding elective office in the future." and "I am actively considering running for elective office." Independent variables included (once again, within the portion of the study that I will be replicating) include, education (as a series of dummy variables, with "some college" as the reference category), income (rated on a 1-10 scale),  Race (As a series of Dummy Variables with "white" as the reference category), Political ideology (as series of dummy variables, with "moderate" as the reference category), "Part ID" (as a series of dummy variables with independent as the dummy category), and age in years. the Original paper did not include a table of descriptive statistics, and the "online supplementary material" did not include a complete table of descriptive statistics, as such it must be noted that there are certain things that are unclear. For instance income coded 1-10 is not specified as to what this refers to, the analysis makes it clear it is coded such that higher numbers indicate higher income, but nowhere is it specified whether this is categories/bins, if each number represents a specific amount of money (e.g. each number represents an extra $15,000 income) or any other system. Likewise the politically ideolgoy quesiton appears to be a 5 point likert scale and in this data set it is 3, which leads me to assume they collapsed the outer ranges into liberal and conservative, and left the middle as "moderate" however this is not explicitly clear and is an assumption on my part. 
+Personality traits come from a 30 question battery (included in the online extra materials) and are scored from 1 to 3, as interval/ratio variables such that respondents values on any given spectrum are highly nuanced, as compared with more popular shorter surveys such as the "Ten Item Personality Inventory" more commonly known as TIPI (Gosling, 2003). The TIPI has been shown to be very robust with results similiar (though not as nuanced) as longer surveys up to 80 questions, so a 30 question survey should be quite robust for the present purposes. 
+
+Broadly speaking one could think of the present study as a case study of the aristotelian idea that "Certain Types of People do Certain Types of Things" (Frede, 1992). In this case the "Types of People" would be specifically referring to types of personality traits, and the "doing certain types of things" would refer to the act of running for political office. These same broad stroke concept could easily be applied to any descriptive designation of personhood and any sort of action or active choice, such that this could be compared with with the Bourdieusian idea of Habitus (1984) such that who a person is, disposition and propensities guide them to their actions (Wacquant, 2005)
+
+# REPLICATION
+
+Below is a direct replication of table 1 models 1 and 2 in the original paper, examining the individual level differences in respondents political ambition using personality traits (model 1) as well as control variables (model 2) using ordinal logistic regression. The online adendum to the paper and replication materials provided by the authors to the Harvard Dataverse include a multinomial logistic regression, but due to the ordinal logistic regression being the analysis that was published in the "print" edition of the paper I chose to replicate this. 
+
+The replication is identical to the published results. The main results for personality results are robust such that the statistical significance, and direction remain the same even when control variables are added in model 2. The magnitude of the effects generally shrinks a bit, but not as much as one might expect. Extraversion is positively associated and the magnitude remains near enough identical(.610, to .609). Openness to Experience shrinks from 0.753 to 0.415, agreeableness shrinks from -0.746 to -0.506, consciousientiousness shrinks from -0.746 to -0.506 and emotional stability is the only one of the personality traits that is not statistically significant, (all while controlling for other persoanlity traits in model 1 and while controlling for other demogrpahic variables in model 2). 
+As far as the demographic variables in this model having a high school diploma is associated with lower political ambitions compared to the reference category of some college (while controlling for other variables in the model), African Americans tend to have higher ambitions than whites while controlling for other variables in the model. Women tend to have lower politial ambitions compared to men while controlling for other variables in the model. Age tends to have a negative association with political ambition such that for every additional year of age there is a 0.023 likelyhood of being in one response category lower on political ambition while controlling for other variables in the model. 
+
+*It should be noted that the choice to render these models using "longtable = true" was done in the interest of more closely replicating the original paper. In its original publication all variables were displayed even though they extended onto more than one page. All models in this replication and analytically extension are presented in this manner for consistency. If this were my own original work I would have likely used modelsummary to hide the control variables not of interest so as to fit the models on one page. 
+
+
+
+```{r initial stuff to laod including loading the data, include=FALSE}
+# Add code here or remove and add other chunks where necessary
+
+##Present the initial replication and discuss your findings. This section should include a table or figure showing the replicated result (as close to the original paper as possible).
+
+##Below is an example of a code chunk. Due to the defaults used above, neither the code nor the output will get rendered to the final document. You will need to modify the chunk options appropriately, depending on your goal. These options are fine for loading and cleaning data, but will need to be changed if you want to display a table or plot. I recommend giving all of your chunks informative names.
+library("effects")
+library("foreign")
+library("gmodels")
+library("gplots")
+library("nlme")
+library("nnet")
+library("stargazer")
+library(MASS)
+library(rockchalk)
+library(pscl)
+library(car)
+library(DescTools)
+library(psych)
+library(rstanarm)
+library(dplyr)
+library(forcats)
+library(gt)
+library(knitr)
+
+
+#initial data loading stuff
+d1 = read.dta("genpop replication.dta")
+d1$race=relevel(d1$race, ref="White")
+d1$dideo=relevel(d1$dideo, ref="Moderate")
+d1$PartyID=relevel(d1$PartyID, ref="Independent")
+d1$educ=relevel(d1$educ, ref="Some College")
+d1$Age=Recode(d1$Age, "-936='18'")
+d1$Age=as.numeric(d1$Age)
+d1$Age=d1$Age+17
+
+##command needed to show stan_polr models
+tidy_custom.polr <- function(x, ...) {
+  s <- lmtest::coeftest(x)
+  out <- data.frame(
+    term = row.names(s),
+    p.value = s[, "Pr(>|t|)"])
+  out
+}
+
+d1$q23_2<- recode(d1$Q23_1, "I am actively considering running for elective office." = "I am open to the possibility of holding elective office in the future.")
+table(d1$Q23_1)
+
+
+levels(d1$Q23_1) <- c('No Interest','Open to Running','Actively Considering Running')
+levels(d1$q23_2) <- c('No Interest','Open/Actively Considering Running')
+table(d1$q23_2)
+
+
+
+
+ d1$Extraversion <- d1$Extra
+ d1$Openness <- d1$Open
+ d1$Conscientiousness <- d1$consc
+ d1$Agreeableness <- d1$Agree
+ d1$Emotional_Stability <- d1$emotstab
+ d1$Education <- d1$educ
+ d1$Race <- d1$race
+ 
+ d1$Political_Ideology <- d1$dideo
+ d1$Political_Party <- d1$partyid
+ d1$Gender <- d1$gender
+
+```
+
+
+\newpage
+
+```{r  Main replication, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+mod.150 = polr(Q23_1~Extraversion+Openness+Conscientiousness+Agreeableness+Emotional_Stability, data=d1)
+
+mod.50 = polr(Q23_1~Extraversion+Openness+Conscientiousness+Agreeableness+Emotional_Stability+Education+income+Race+Political_Ideology+Political_Party+Gender+Age, data=d1, Hess=T)
+
+
+
+modelsummary::modelsummary(list(mod.150,mod.50),title = 'Main Replication with and without Control Variables', output ='latex',stars = TRUE, longtable=TRUE)
+
+
+
+```
+
+
+
+# BAYESIAN REPLICATION
+As a cross validation (as well as part of the assignment for the course) this same model was fitted as a bayseian ordinal logistic regression for the purposes of comparing with the above frequentist ordinal logistic regression. Though the Bayesian framework does not allow for statistical significance tests and subsequent "stars" as frequentist models do, showing the 95% confidence intervals serves as a reasonable metric with which to compare coefficients direction and statistical significance, such that any 95% confidence intervals that cross zero can be for all intents and purposes thought of as 
+statistically insignificant, and if they don't cross zero (i.e. both sides of the confidence interval are positive, or both sides are negative) the results can be thought of as statistically significant. 
+
+For the personality traits we see the same trend as in the frequentist model such that extraversion, and openness to experience are both positively related to higher political ambition, whereas conscientiousness and agreeableness are negatively related to higher political ambition (that is to say these respondents who embody these traits are less liekly to want to pursue political office). Lastly Emotional stability is effectively statistically insignificant. 
+
+Almost all the control variables in this Bayesian Model however has a 95% confidence interval that crosses zero, effectively rendering them to be statistically insignificant while controlling for the other variables in the model. The only exceptions were gender and age, which are both in sync with the frequentist model such that women tend to have lower political ambitions than men, and older folks tend to have lower political ambitions. 
+
+\newpage
+
+```{r  Bayes Replication, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+
+
+#You can also use LaTeX to render equations, either as part of a sentencence like $this$ or as a separate like like the following:
+
+#$$E = MC^2$$
+
+
+#Present the Bayesian extension of the model and discuss your findings. Pay close attention to any discrepancies between the Bayesian and frequentist models.
+
+mod.05b<- stan_polr(Q23_1~Extraversion+Openness+Conscientiousness+Agreeableness+Emotional_Stability+Education+income+Race+Political_Ideology+Political_Party+Gender+Age, data=d1,
+                    method = "logistic",
+                    prior = R2(location = .15),
+                    seed = 12345, chains = 1, refresh = 0, 
+                    iter = 2000, warmup = 1000)
+
+rm("tidy_custom.polr")
+
+library(broom.mixed)
+options(modelsummary_get = "broom")
+
+modelsummary::modelsummary(mod.05b, title = 'Bayesian Replication', output ='latex',statistic ="conf.int", longtable=TRUE)
+
+
+
+
+
+```
+
+
+
+# ALTERNATIVE SPECIFICATIONS
+
+In the interest of alternatively specified models towards the goal of sensitivity checks, I have run a few different version of the model. These alternate specifications were then all run with both frequentist models, as well as with bayesian models. 
+
+Firstly I tried adding age squared to the model, as the age range in the sample ranges from 18-90, it seems likely that there would be a curvilinear relationship between age and political ambition such that after a certain age it is likely people who may have had political ambitions when they were younger have since given up this ambition. While career politicians would likely serve as evidence of the opposite trend such that political ambition perhaps stays high throughout the life course, most people are not career politicians. 
+
+Secondly being that the dependent variable had so few respondents in the "actively considering running for office" category, it seemed logical to lump these respondents in with the "open to running" respondents the logic being that if respondents are "actively considering" running then they by default must also be "open" to it. 
+
+Thirdly, these 2 ideas were combined for a logistic regression that also includes an age squared term. 
+
+This same frame work (Original model, Add age squared, Logistic, Logistic with age squared)
+was then repeated using bayesian models.  
+
+These are displayed in several tables, Table 3 displays exclusively Frequentist models, with Model 1 being the original ordinal logistic replication.
+Model 2 adds the age squred term.
+Model 3 runs the original variables in a binary logistic model.
+Model 4 adds the age squared term to the binary logistic model.
+\newpage
+
+```{r alternate specs, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+
+#Discuss each of the alternative specifications and use tables and/or figures to present your results. There should be at least three alternatives (one changing data, one changing variables, one changing model) but you are welcome to do more or to consider something more systematic.
+
+
+#FREQUENTIST MODELS 
+#frequentist ordinal with age squared
+mod.50age = polr(Q23_1~Extraversion+Openness+Conscientiousness+Agreeableness+Emotional_Stability+Education+income+Race+Political_Ideology+Political_Party+Gender+Age +I(Age^2), data=d1, Hess=T)
+#frequentist logistic 
+mod.50logit <- glm(Q23_1~Extraversion+Openness+Conscientiousness+Agreeableness+Emotional_Stability+Education+income+Race+Political_Ideology+Political_Party+Gender+Age, family = "binomial", data=d1)
+
+#frequentist logistic with age squared
+mod.50logitage <-   glm(Q23_1~Extraversion+Openness+Conscientiousness+Agreeableness+Emotional_Stability+Education+income+Race+Political_Ideology+Political_Party+Gender+Age+ I(Age^2), family = "binomial", data=d1)
+
+
+#BAYESIAN MODELS
+
+##command needed to show stan_polr models
+
+tidy_custom.polr <- function(x, ...) {
+  s <- lmtest::coeftest(x)
+  out <- data.frame(
+    term = row.names(s),
+    p.value = s[, "Pr(>|t|)"])
+  out
+}
+
+
+#bayes with age squared
+mod.05bage<- stan_polr(Q23_1~Extraversion+Openness+Conscientiousness+Agreeableness+Emotional_Stability+Education+income+Race+Political_Ideology+Political_Party+Gender+Age+I(Age^2), data=d1,
+                       method = "logistic",
+                       prior = R2(location = .15),
+                       seed = 12345, chains = 1, refresh = 0, 
+                       iter = 2000, warmup = 1000)        
+
+
+#bayes logistic
+mod.05blogit <- stan_glm(q23_2~Extraversion+Openness+Conscientiousness+Agreeableness+Emotional_Stability+Education+income+Race+Political_Ideology+Political_Party+Gender+Age,
+                        data = d1,
+                       family = binomial(link = "logit"),
+                          seed = 12345,
+                        chains = 1,  refresh = 0,
+                        iter = 5000, warmup=1000)
+
+
+
+
+#bayes logistic with age squared 
+
+mod.05blogitage <- stan_glm(q23_2~Extraversion+Openness+Conscientiousness+Agreeableness+Emotional_Stability+Education+income+Race+Political_Ideology+Political_Party+Gender+Age+I(Age^2),
+                         data = d1,
+                         family = binomial(link = "logit"),
+                          seed = 12345,
+                        chains = 1,  refresh = 0,
+                        iter = 5000, warmup=1000)
+
+
+
+
+
+
+
+##show Non Bayesian models
+
+
+
+modelsummary::modelsummary(list(mod.50,mod.50age,mod.50logit, mod.50logitage),title = 'Frequentist models', output ='latex',stars = TRUE, longtable=TRUE)
+
+```
+
+
+
+Tables 4 and 5 show the Bayesian Models. This had to split up onto 2 separate tables in order to make the tables readable. 
+ 
+ Table 4 shows both the Logistic model (model 1) and the ordinal logistic model (model 2) without the age squared term. Table 5 shows both the Logisitc (model 1) and ordinal logistic model( model 2) *with* the age squared term. 
+ 
+\newpage
+
+```{r  chunk, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+
+
+rm("tidy_custom.polr")
+library(broom.mixed)
+options(modelsummary_get = "broom")
+
+
+modelsummary::modelsummary(list(mod.05b,mod.05blogit),title = 'Bayesian Ordinal compared to Logistic', output ='latex',statistic ="conf.int", longtable=TRUE )
+
+
+```
+
+\newpage
+
+
+```{r  chunk2, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+
+
+
+modelsummary::modelsummary(list(mod.05bage,mod.05blogitage),title = 'Bayesian Models with Asge Squared term', output ='latex',statistic ="conf.int", longtable=TRUE )
+
+
+#modelsummary::modelsummary(list(mod.05blogit,mod.05blogitage ),title = 'Bayesian  Logistic', output ='latex',statistic ="conf.int", longtable=TRUE )
+
+
+```
+
+We can see that the personality variables (the primary variables of interest) have robust finding such that all of the various model specifications show the same general trend such that extraversion and openness are positively associated with political ambition while controlling for other variables in the model while conscientiousness and agreeableness are both negatively associated with political ambition while controlling for other variables in the model, and emotional stability remains statistically insigificant across all models. The bayesian models echo these findings again by looking at the range of the the 95% confidence intervals as a way to compare to frequentist statistical significance. 
+
+Of the control variables, within the frequentist models the only robust findings were the following: Respondesnts with a high school education were less likely than their peers with some college education to have high poliical ambition while controlling for other variables in the model. Black respondent, tend to have higher political amition than their white peers and women tend to have lower political ambition than their male peers while controlling for other variables in the model. Of these only female remained robust across all models (including the bayesian models) with with the 95% confidence interval for black respondents crossing zero in the bayesian ordinal logistic models, however in the bayesian binary logistic models the finding holds and as will be demonstrated below the bayesian logistic models seem to have a better model fit than the bayesian ordinal logistic models. 
+
+Within the frequentist models age had a (small) negative relationship with political ambition, however when age squared is added it became positive with the square term being negative suggesting a curvilinear relationship. However in the binary logistic model age and age squared were both statistically insignificant. Within the logisti cmodels the same trend is seen such that when there is no age squared term there appears to be a robust negative relationship. however the age squared term in the bayesian models renders age and age squared insignificant in both the ordinal logistic and binary logistic bayesian models. This all together seems to generally suggest that within this sample age is relatively inconsequential as a predictor of political ambition.
+
+Using the Loo_Compare function displays that the bayesian logistic models have considerably better model fit than the bayesian ordinal logistic models. The age squared term however for each, has little to no effect on the overall model fit (as suggested above). It actually makes the model fit (marginally, inconsequentially) worse for the logistic models, and (marginally, inconsequentially) better for the ordinal logistic model. 
+
+
+Loo Compare
+```{r  loo compare, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+
+
+loo_ord <- loo(mod.05b)
+loo_ord2 <- loo(mod.05bage)
+loo_ord3 <- loo(mod.05blogit)
+loo_ord4 <- loo(mod.05blogitage)
+
+
+loo_compare(loo_ord,loo_ord2,loo_ord3,loo_ord4)
+
+
+
+```
+
+
+The Same effect can be seen more visually in a Posterior Predictive Plot, in which it can learly be seen that the logistic models have a better fit than the ordinal logistic models , however the differnece between the age squared term being present or not is near impossible to tell visually.
+
+\newpage
+
+Bayesian Ordinal Logistic 
+```{r pp plot 1, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+
+pp_check(mod.05b)
+
+```
+
+\newpage
+
+Bayesian Ordinal Logistic with Age Squared
+```{r pp plot 2, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+
+pp_check(mod.05bage)
+
+```
+\newpage
+
+Bayesian Logistic 
+```{r pp plot 3, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+
+pp_check(mod.05blogit)
+```
+\newpage
+
+Bayesian Logistic with Age squared
+```{r pp plot 4, echo =FALSE, mysize=TRUE, size='\\tiny',out.width='100%'}
+pp_check(mod.05blogitage)
+
+
+```
+
+
+# DISCUSSION
+Overall my findings in this extended analysis are consistent with what the authors found and published. I must admit that I was fortunate that the authors published relatively robust replication materials which made the entire endeavor very feasible. In the replication materials the authors included instructions for other modles that they ran (presumably during the course of their "data exploration" analysis) that did not make it into the final published paper such as a multinomial logistic model. What was conspicuously absent hoewver was an age squared term, which leads me to think that this was an oversight on their part. As it turns out it, it had an inconsequential effect, but the logic behind testing it I think is reasonable and being that they included other analyses they attempted I would have liked to have seen them include that as a term, even if it is something that did not make it into the final paper. I have a similiar critique behind them not having run any binary logisitc model when the outcome variable was so heavily skewed with so few respondents being in the "Actively considering running" category. 
+
+Though the bayesian models did not seem to add any additional analytical power directly, using bayesian models in both ordinal logistic and binary logistic fashion and using either the loo compare or the posterior predictive visualization made it very clear that the logistic models were a considerably better fit. While this can same trend can be seen in the log likelyhood scores of the frequentist models, the visualization in particular is far more compelling. This reason alone would provide reasonable grounds to run models in both frequentist and bayesian frameworks, let alone the extra confidence granted by a cross validation using an entirely different method. 
+
+
+# REFERENCES
+
+
+Bourdieu, Pierre. 1984. Distinction: A Social Critique of the Judgement of Taste. Harvard University Press.
+Dynes, Adam M., Hans J. G. Hassell, and Matthew R. Miles. 2019. “The Personality of the Politically Ambitious.” Political Behavior 41(2):309–36. doi: 10.1007/s11109-018-9452-x.
+Frede, Michael. 1992. “On Aristotle’s Conception of Soul.” Pp. 93–107 in Essays on Aristotle?s de Anima, edited by M. C. Nussbaum and A. O. Rorty. Clarendon Press.
+Wacquant, Loïc. 2005. “Race as Civic Felony*.” International Social Science Journal 57(183):127–42. doi: 10.1111/j.0020-8701.2005.00536.x.
+
+
